@@ -72,7 +72,7 @@ python3 $FAIRSEQ/train.py $DATA_DIR \
     --weight-decay 0.0 \
     --criterion label_smoothed_cross_entropy \
     --label-smoothing 0.1 \
-    --max-tokens 4000 \
+    --max-tokens 10000 \
     --max-update 100000 \
     --save-dir $MODEL_DIR \
     --no-epoch-checkpoints \
@@ -83,7 +83,7 @@ python3 $FAIRSEQ/train.py $DATA_DIR \
     --log-format simple \
     --log-interval 5 \
     --ddp-backend no_c10d \
-    --update-freq 4 \
+    --update-freq 8 \
     --fp16 \
     --seed $SEED \
 
