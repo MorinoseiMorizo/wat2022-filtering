@@ -14,7 +14,7 @@ ASPEC dev/test sets are also required for training.
 We prepared the Docker container that was already installed the tools for training.
 Use the following commands to run.
 You might want to change some variables in `docker_run.sh`.
-~/wat2022-filtering-corpus` should be changed to the corpus directory, which you placed cleaned data and dev/test sets as explained in the next section.
+`~/wat2022-filtering-corpus` should be changed to the corpus directory, which you placed cleaned data and dev/test sets as explained in the next section.
 Note that you can change `~/wat2022-filtering` to the path you want to store the experimental results.
 This will be connected to the container as `/host_disk`.
 ``` sh
