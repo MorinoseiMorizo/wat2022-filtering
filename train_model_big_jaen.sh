@@ -14,6 +14,7 @@ TRAIN_SRC=/host_disk/corpus/spm/32000/train.$SRC
 TRAIN_TRG=/host_disk/corpus/spm/32000/train.$TRG
 DEV_SRC=/host_disk/corpus/spm/32000/aspec-je.dev.$SRC
 DEV_TRG=/host_disk/corpus/spm/32000/aspec-je.dev.$TRG
+DEV_TRG_RAW=/corpus/aspec-je.dev.$TRG
 TEST_SRC=/host_disk/corpus/spm/32000/aspec-je.test.$SRC
 TEST_TRG=/host_disk/corpus/spm/32000/aspec-je.test.$TRG
 TEST_TRG_RAW=/corpus/aspec-je.test.$TRG
@@ -91,9 +92,8 @@ python3 $FAIRSEQ/train.py $DATA_DIR \
 ######################################
 # Generate
 ######################################
-# decode
+# Test set
 B=`basename $TEST_SRC`
-
 python3 $FAIRSEQ/fairseq_cli/generate.py $DATA_DIR \
     --gen-subset test \
     --path $MODEL_DIR/checkpoint_best.pt \
@@ -109,3 +109,22 @@ cat $MODEL_DIR/$B.true | spm_decode --model=$SPM_MODEL --input_format=piece > $M
 
 # evaluation
 cat $MODEL_DIR/$B.true.detok | sacrebleu -l $SRC-$TRG $TEST_TRG_RAW | tee -a $MODEL_DIR/test.log
+
+
+# Dev set
+B=`basename $TEST_SRC`
+python3 $FAIRSEQ/fairseq_cli/generate.py $DATA_DIR \
+    --gen-subset valid \
+    --path $MODEL_DIR/checkpoint_best.pt \
+    --max-tokens 1000 \
+    --beam 6 \
+    --lenpen 1.0 \
+    --log-format simple \
+    --remove-bpe \
+    | tee $MODEL_DIR/$B.hyp
+
+grep "^H" $MODEL_DIR/$B.hyp | sed 's/^H-//g' | sort -n | cut -f3 > $MODEL_DIR/$B.true
+cat $MODEL_DIR/$B.true | spm_decode --model=$SPM_MODEL --input_format=piece > $MODEL_DIR/$B.true.detok
+
+# evaluation
+cat $MODEL_DIR/$B.true.detok | sacrebleu -l $SRC-$TRG $DEV_TRG_RAW | tee -a $MODEL_DIR/valid.log
