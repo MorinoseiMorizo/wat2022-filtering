@@ -1,5 +1,6 @@
 # WAT 2022 Parallel Corpus Filtering Task NMT Training Scripts
 This repository includes the NMT training scripts for the WAT 2022 parallel corpus filtering task.
+We strongly recommend you pull the latest scripts since they may be subject to change.
 
 
 ## Requirements
@@ -39,10 +40,14 @@ Please place and rename your cleaned corpus and ASPEC dev/test as follows:
     train.ja
 ```
 
+
 ## Training the NMT model
 `./docker_run.sh` will train the model and evaluate it.
 
-Details to be written.
+Preprocessing and training details are written in `preprocess.sh` and `train_model_big_*.sh`, respectively.
+We expect to train the model on a single A100 GPU.
+If you use other GPUs, you may need to reduce GPU memory usage.
+In such a case, you can change `--max-tokens` to 5000, and `--update-freq` to 16.
 
 
 ## Contact
