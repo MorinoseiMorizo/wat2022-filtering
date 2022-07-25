@@ -112,7 +112,7 @@ cat $MODEL_DIR/$B.true.detok | sacrebleu -l $SRC-$TRG $TEST_TRG_RAW | tee -a $MO
 
 
 # Dev set
-B=`basename $TEST_SRC`
+B=`basename $DEV_SRC`
 python3 $FAIRSEQ/fairseq_cli/generate.py $DATA_DIR \
     --gen-subset valid \
     --path $MODEL_DIR/checkpoint_best.pt \
